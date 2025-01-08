@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Fazendo checkout do código...'
-                git branch: 'main', url: 'https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git'
+                git branch: 'main', url: 'https://github.com/RenAxl/sgp-authuser.git'
             }
         }
 
