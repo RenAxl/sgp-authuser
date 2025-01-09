@@ -17,6 +17,7 @@ pipeline {
         stage('Build & Package') {
             steps {
                 echo '🔨 Iniciando o Build e Empacotamento...'
+                sh 'bash mvnw clean install'
                 sh './mvnw clean install'
             }
         }
