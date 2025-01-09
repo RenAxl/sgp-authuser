@@ -9,38 +9,45 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo 'Fazendo checkout do código...'
+                echo '📥 Fazendo checkout do código...'
                 git branch: 'main', url: 'https://github.com/RenAxl/sgp-authuser.git'
             }
         }
 
-        stage('Build') {
+        stage('Build & Package') {
             steps {
-                echo 'Iniciando o Build...'
+                echo '🔨 Iniciando o Build e Empacotamento...'
                 sh './mvnw clean install'
             }
         }
 
-        stage('Package') {
+        stage('Verify Artifact') {
             steps {
-                echo 'Empacotando Aplicação...'
-                sh './mvnw package'
+                echo '🧐 Verificando se o artefato foi gerado...'
+                sh '''
+                if [ -f target/*.jar ]; then
+                    echo "✅ Artefato JAR encontrado!"
+                else
+                    echo "❌ Artefato JAR não encontrado! Verifique logs do build."
+                    exit 1
+                fi
+                '''
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'Deploy Finalizado. Artefato disponível no diretório target.'
+                echo '🚀 Deploy Finalizado. Artefato disponível no diretório target.'
             }
         }
     }
 
     post {
         success {
-            echo 'Build finalizado com sucesso!'
+            echo '🎉 Build finalizado com sucesso!'
         }
         failure {
-            echo 'Erro durante o Build!'
+            echo '🚨 Erro durante o Build! Verifique os logs no Jenkins.'
         }
     }
 }
